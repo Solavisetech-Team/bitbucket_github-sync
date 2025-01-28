@@ -1,0 +1,45 @@
+name: Sync from Bitbucket
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Add Bitbucket remote with git credential helper
+        env:
+          BITBUCKET_USERNAME: ${{ secrets.BITBUCKET_USERNAME }}
+          BITBUCKET_APP_PASSWORD: ${{ secrets.BITBUCKET_APP_PASSWORD }}
+        run: |
+          git config --global credential.helper store
+          echo "https://$BITBUCKET_USERNAME:$BITBUCKET_APP_PASSWORD@bitbucket.org" > ~/.git-credentials
+          git remote add bitbucket https://bitbucket.org/solavisetech-migration/aws-etl-tf-python-project.git
+          git fetch bitbucket
+          git reset --hard bitbucket/master
+      - name: Set up GitHub credentials
+        run: |
+          git config --global user.email "felixmomodebe0711@gmail.com"
+          git config --global user.name "Felix M."
+      - name: Push changes to GitHub using Personal Access Token
+        env:
+          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+        run: |
+          git remote set-url origin  https://github.com/Solavisetech-Team/bitbucket_github-sync.git
+          git push -f origin HEAD:main
+      - name: Clean up Bitbucket remote
+        run: git remote remove bitbucket
