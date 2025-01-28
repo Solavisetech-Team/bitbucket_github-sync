@@ -2,7 +2,7 @@ name: Sync from Bitbucket.
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "migration-sync" ]
   pull_request:
     branches: [ "main" ]
   schedule:
