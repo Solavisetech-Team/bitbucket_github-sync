@@ -67,6 +67,10 @@ The synchronization process can be initiated through multiple triggers:
 - Forces push to ensure exact synchronization
 - Updates the `migration-sync` branch
 
+## Flowchart Visualization
+
+![image](https://github.com/user-attachments/assets/49555b57-37fb-465e-9d82-00b7bfcf59eb)
+
 ## Troubleshooting
 
 ### Scheduled Triggers (Cron Jobs)
