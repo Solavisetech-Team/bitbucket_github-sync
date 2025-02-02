@@ -1,12 +1,14 @@
 name: Sync from Bitbucket
 
 on:
+  repository_dispatch:
+    types: [bitbucket_sync]
   push:
     branches: [ "main", "migration-sync" ]
   pull_request:
     branches: [ "main" ]
-  schedule:
-    - cron: '*/5 * * * *'
+  # schedule:
+  #   - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
